@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>VTOP Auto</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#f0f5ff;--surface:#ffffff;--border:#c7d7f5;
+      --accent:#1a56db;--accent2:#3b82f6;--danger:#ef4444;
+      --text:#1e293b;--muted:#64748b;--radius:10px;
+    }
+    body{width:300px;background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;overflow:hidden}
+
+    /* Header */
+    .header{background:linear-gradient(135deg,#1a56db,#2563eb);padding:14px 20px 12px;border-bottom:1px solid #1d4ed8;position:relative;overflow:hidden}
+    .header::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(255,255,255,.18),transparent 70%)}
+    .header-row{display:flex;align-items:center;gap:12px}
+    .logo{width:44px;height:44px;border-radius:10px;background:#fff;padding:2px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.2);overflow:hidden;display:grid;place-items:center}
+    .logo img{width:100%;height:100%;object-fit:contain;border-radius:8px}
+    .title{font-size:15px;font-weight:800;color:#ffffff}
+    .subtitle{font-size:10px;color:rgba(255,255,255,.7);font-family:'Space Mono',monospace;letter-spacing:.08em;margin-top:2px}
+
+    /* Status */
+    .status-bar{display:flex;align-items:center;gap:6px;margin:12px 20px 0;padding:7px 10px;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted)}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .3s}
+    .dot.saved{background:#22c55e;box-shadow:0 0 6px #22c55e}
+    .dot.empty{background:var(--danger)}
+
+    /* Form */
+    .form-body{padding:14px 20px 0;display:flex;flex-direction:column;gap:10px}
+    .field-group{display:flex;flex-direction:column;gap:4px}
+    label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:'Space Mono',monospace}
+    input[type=text],input[type=password]{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:9px 12px;color:var(--text);font-family:'Space Mono',monospace;font-size:12px;outline:none;transition:border-color .2s,box-shadow .2s;width:100%}
+    input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,86,219,.12)}
+    input::placeholder{color:#94a3b8}
+    .pw-wrap{position:relative}
+    .pw-wrap input{padding-right:38px}
+    .toggle-pw{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;padding:2px;transition:color .2s}
+    .toggle-pw:hover{color:var(--accent)}
+
+    /* Role selector */
+    .role-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+    .role-btn{
+      padding:8px 6px;border-radius:8px;border:1px solid var(--border);
+      background:var(--surface);color:var(--muted);font-family:'Syne',sans-serif;
+      font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;
+      display:flex;align-items:center;justify-content:center;gap:5px;
+    }
+    .role-btn:hover{border-color:var(--accent);color:var(--accent)}
+    .role-btn.active{
+      border-color:var(--accent);background:rgba(26,86,219,.08);
+      color:var(--accent);box-shadow:0 0 0 1px rgba(26,86,219,.2);
+    }
+
+    /* Buttons */
+    .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 20px 6px}
+    .btn{padding:9px 12px;border-radius:var(--radius);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .15s;text-align:center}
+    .btn-primary{background:var(--accent);color:#ffffff}
+    .btn-primary:hover{background:#1d4ed8;transform:translateY(-1px);box-shadow:0 4px 14px rgba(26,86,219,.35)}
+    .btn-ghost{background:transparent;color:var(--danger);border:1px solid rgba(239,68,68,.3)}
+    .btn-ghost:hover{background:rgba(239,68,68,.06);border-color:var(--danger)}
+
+    /* Toast */
+    .toast{margin:0 20px 8px;padding:8px 12px;border-radius:7px;font-size:11px;font-family:'Space Mono',monospace;display:none;align-items:center;gap:7px}
+    .toast.success{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.35);color:#16a34a;display:flex}
+    .toast.error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.35);color:var(--danger);display:flex}
+
+    /* Steps */
+    .divider{height:1px;background:var(--border);margin:0 20px}
+    .steps{padding:10px 20px 6px;display:flex;flex-direction:column;gap:5px}
+    .step{display:flex;align-items:flex-start;gap:8px;font-size:10px;color:#64748b;line-height:1.5}
+    .step-n{min-width:16px;height:16px;border-radius:4px;background:var(--surface);border:1px solid var(--border);display:grid;place-items:center;font-size:9px;font-family:'Space Mono',monospace;color:var(--accent);flex-shrink:0;margin-top:1px;padding:0 2px}
+    .step-n.ai{color:var(--accent2);border-color:rgba(59,130,246,.3)}
+
+    /* Toggle switch */
+    .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:var(--surface);border-bottom:1px solid var(--border)}
+    .toggle-label{display:flex;flex-direction:column;gap:2px}
+    .toggle-label strong{font-size:12px;font-weight:700;color:var(--text)}
+    .toggle-label small{font-size:10px;color:var(--muted);font-family:'Space Mono',monospace}
+    .switch{position:relative;width:42px;height:24px;flex-shrink:0}
+    .switch input{opacity:0;width:0;height:0;position:absolute}
+    .slider{position:absolute;inset:0;background:#cbd5e1;border-radius:24px;cursor:pointer;transition:background .25s}
+    .slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .25s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+    .switch input:checked + .slider{background:var(--accent)}
+    .switch input:checked + .slider::before{transform:translateX(18px)}
+    .toggle-row.off .toggle-label strong{color:var(--muted)}
+
+    /* Footer */
+    .footer{text-align:center;padding:8px 20px 12px;font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.04em}
+    .footer span{color:var(--accent);font-weight:700}
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-row">
+    <div class="logo"><img src="icons/logo.png" alt="VIT Auto Login"/></div>
+    <div>
+      <div class="title">VTOP Auto</div>
+      <div class="subtitle">Auto-login · CAPTCHA Solver</div>
+    </div>
+  </div>
+</div>
+
+<div class="toggle-row" id="toggleRow">
+  <div class="toggle-label">
+    <strong id="toggleLabel">Auto-Login Enabled</strong>
+    <small id="toggleSub">Extension is active</small>
+  </div>
+  <label class="switch">
+    <input type="checkbox" id="enableToggle" checked/>
+    <span class="slider"></span>
+  </label>
+</div>
+
+<div style="padding:12px 20px 0">
+  <div class="status-bar">
+    <div class="dot" id="statusDot"></div>
+    <span id="statusText">Checking saved settings…</span>
+  </div>
+</div>
+
+<div class="form-body">
+
+  <!-- Role selector -->
+  <div class="field-group">
+    <label>Login As</label>
+    <div class="role-grid">
+      <button class="role-btn" data-role="student">🎓 Student</button>
+      <button class="role-btn" data-role="employee">💼 Employee</button>
+      <button class="role-btn" data-role="parent">👨‍👧 Parent</button>
+      <button class="role-btn" data-role="alumni">🏅 Alumni</button>
+    </div>
+  </div>
+
+  <!-- Credentials -->
+  <div class="field-group">
+    <label for="usernameInput">Registration / ID</label>
+    <input type="text" id="usernameInput" placeholder="VTOP Username" autocomplete="off" spellcheck="false"/>
+  </div>
+  <div class="field-group">
+    <label for="passwordInput">Password</label>
+    <div class="pw-wrap">
+      <input type="password" id="passwordInput" placeholder="Your VTOP password" autocomplete="off"/>
+      <button class="toggle-pw" id="togglePw">👁</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="btn-row">
+  <button class="btn btn-primary" id="saveBtn">Save &amp; Enable</button>
+  <button class="btn btn-ghost"   id="clearBtn">Clear</button>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="divider"></div>
+
+<div class="steps">
+  <div class="step"><span class="step-n">1</span>Select your role and enter credentials above</div>
+  <div class="step"><span class="step-n">2</span>Click Save &amp; Enable, then visit VTOP</div>
+  <div class="step"><span class="step-n ai">AI</span>CAPTCHA solved automatically via Captop model</div>
+</div>
+
+<div class="divider"></div>
+
+<div class="footer">Made with ❤️ for <span>Vitians</span></div>
+
+<script src="popup.js"></script>
+</body>
+</html>
