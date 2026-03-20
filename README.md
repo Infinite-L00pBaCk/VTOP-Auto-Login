@@ -57,6 +57,4 @@ Made with ❤️ for **Vitians**.
 
 *If you find this useful, consider giving the repo a ⭐!*
 
----
-
-**Would you like me to generate a `CONTRIBUTING.md` file or a set of promo images for the Chrome Web Store?**
+----
