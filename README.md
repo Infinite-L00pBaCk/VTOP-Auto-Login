@@ -1,70 +1,62 @@
-# VTOP Auto Chrome Extension
+# VTOP Auto Login (v7.0.0)
 
-Chrome extension that automatically logs you into the VTOP portal by autofilling credentials, solving the captcha using an API, and submitting the form.
-
-Works on:
-`https://vtop.vitbhopal.ac.in/*`
+An ultra-fast, fully automatic Chrome Extension for the **VIT Bhopal-VTOP Portal**. It streamlines your login process by selecting your role, autofilling credentials, and solving CAPTCHAs in milliseconds using a custom-trained AI model.
 
 ---
 
-# Installation
+## 🚀 Key Features
 
-1. Download or clone this repository.
-
-```
-git clone https://github.com/yourusername/vtop-autologin-extension.git
-```
-
-2. Open Chrome and go to:
-
-```
-chrome://extensions
-```
-
-3. Enable **Developer Mode** (top right).
-
-4. Click **Load Unpacked**.
-
-5. Select the extension folder.
+* **AI CAPTCHA Solver:** Powered by the **captop CRNN model**, specifically trained on over 800+ real VTOP CAPTCHAs for near 100% accuracy.
+* **Zero-Click Login:** Automatically detects your role (Student, Employee, etc.), fills your credentials, and submits the form.
+* **Multi-Role Support:** Works seamlessly for Students, Employees, Parents, and Alumni.
+* **Modern UI:** Features a sleek, "Space Mono" inspired popup interface for easy credential management.
+* **Smart Reload Guard:** Detects if the VTOP page fails to load the CAPTCHA image and refreshes automatically to ensure a successful login.
 
 ---
 
-# Setup
+## 🛠️ Installation
 
-1. Click the extension icon in Chrome.
-2. Enter your **VTOP Username**.
-3. Enter your **Password**.
-4. Select your **Role** (Student / Employee / Parent / Alumni).
-5. Click **Save**.
-
-Credentials are stored locally using `chrome.storage.local`.
-
----
-
-# Usage
-
-1. Open the VTOP website:
-
-```
-https://vtop.vitbhopal.ac.in
-```
-
-2. The extension will automatically:
-
-* Select your role
-* Autofill username and password
-* Solve the captcha using an API
-* Submit the login form
-
-You will be logged in automatically.
+1.  **Download** or Clone this repository:
+    ```bash
+    git clone https://github.com/yourusername/VTOP-Auto-Login.git
+    ```
+2.  Open **Google Chrome** and navigate to `chrome://extensions/`.
+3.  Enable **Developer mode** (toggle in the top right corner).
+4.  Click **Load unpacked** and select the `VTOP-Auto-blue` folder from the downloaded files.
 
 ---
 
-# Security
+## ⚙️ Setup
 
-* Credentials are stored **only on your local system**.
-* No username or password is sent to any external server.
-* The extension does not collect or store any user data remotely.
+1.  Click the **VTOP Auto** icon in your Chrome toolbar.
+2.  **Select your Role:** Choose between Student, Employee, Parent, or Alumni.
+3.  **Enter Credentials:** Input your Registration/ID and VTOP Password.
+4.  **Save & Enable:** Click the "Save & Enable" button. The status dot will turn **green** when ready.
 
 ---
 
+## 🔒 Security & Privacy
+
+* **Local Storage:** Your credentials are saved strictly on your local machine using `chrome.storage.local`.
+* **Privacy Focused:** No passwords or usernames are sent to external servers. Only the CAPTCHA image blob is sent to the solver API for decoding.
+* **Transparent:** No data collection or remote tracking.
+
+---
+
+## 💻 Technical Details
+
+* **Manifest Version:** 3
+* **CAPTCHA API:** Utilizes a Cloudflare Worker proxy (`captop-proxy.sykik.workers.dev`) for high availability.
+* **Logic:** Uses a non-blocking `MutationObserver` to detect and interact with VTOP elements instantly as they appear in the DOM.
+
+---
+
+## 🤝 Support
+
+Made with ❤️ for **Vitians**. 
+
+*If you find this useful, consider giving the repo a ⭐!*
+
+---
+
+**Would you like me to generate a `CONTRIBUTING.md` file or a set of promo images for the Chrome Web Store?**
