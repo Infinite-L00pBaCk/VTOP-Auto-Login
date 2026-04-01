@@ -1,4 +1,4 @@
-# VTOP Auto Login (v1.0.0)
+# VTOP Auto-Login (v1.0.0)
 
 An ultra-fast, fully automatic Chrome Extension for the **VIT Bhopal-VTOP Portal**. It streamlines your login process by selecting your role, autofilling credentials, and solving CAPTCHAs in milliseconds using a custom-trained AI model.
 
